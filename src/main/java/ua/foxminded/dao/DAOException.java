@@ -7,7 +7,6 @@ package ua.foxminded.dao;
  * @author Daria Bogush
  * @version 1.0
  */
-@SuppressWarnings("serial")
 public class DAOException extends Exception {
     /**
      * Constructs a new exception with null as its detail message.

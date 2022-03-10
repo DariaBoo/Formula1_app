@@ -3,8 +3,10 @@ package ua.foxminded.formatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import ua.foxminded.dto.RacerDTO;
+import ua.foxminded.racer.Racer;
 
 /**
  * Provides support for alignment and formatting of result.
@@ -29,7 +31,7 @@ public class Formatter {
     private final String DOT = ".";
     private final String SLASH = "/";
     private final String lastWinnerNumber = "15";// assignment's condition
-    private final List<RacerDTO> racers;
+    private final List<Racer> racers;
     private int maxNameLength;
     private int maxTeamLength;
     private int maxLapTimeLength;
@@ -40,7 +42,7 @@ public class Formatter {
      * 
      * @param racers list of RacerDTO filled from the database.
      */
-    public Formatter(List<RacerDTO> racers) {
+    public Formatter(List<Racer> racers) {
         this.racers = racers;
     }
 
@@ -56,7 +58,7 @@ public class Formatter {
         preparedRacers.stream().map(string -> string.split(SLASH)).forEach(s -> {
             result.append(String.format(format, s[0], PIPE + s[1], PIPE + s[2]));
             if (s[0].startsWith(lastWinnerNumber)) {
-                result.append(createLineSeparator(maxLineInfoLength, '-')).append("\n");
+                result.append(createLineSeparator(maxLineInfoLength, "-")).append("\n");
             }
         });
         return result.toString();
@@ -92,12 +94,8 @@ public class Formatter {
         return Arrays.stream(part).mapToInt(string -> string.length()).max().getAsInt();
     }
 
-    private String createLineSeparator(int countOfSymbols, char symbol) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < countOfSymbols; i++) {
-            result.append(symbol);
-        }
-        return result.toString();
+    private String createLineSeparator(int countOfSymbols, String symbol) {        
+        return Stream.generate(() -> symbol).limit(countOfSymbols).collect(Collectors.joining());
     }
 
     private String formatLapTime(long duration) {

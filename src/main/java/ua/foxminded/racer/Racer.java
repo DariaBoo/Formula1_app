@@ -1,4 +1,4 @@
-package ua.foxminded.dto;
+package ua.foxminded.racer;
 
 import java.util.Objects;
 
@@ -25,7 +25,7 @@ import java.util.Objects;
  * @author Daria Bogush
  * @version 1.0
  */
-public class RacerDTO {
+public class Racer {
     private final String name;
     private final String team;
     private final Long lapTime;
@@ -39,7 +39,7 @@ public class RacerDTO {
      * @param lapTime time in milliseconds greater then zero during which the rider
      *                completed one lap.
      */
-    public RacerDTO(String name, String team, Long lapTime) {
+    public Racer(String name, String team, Long lapTime) {
         this.name = Objects.requireNonNull(name,
                 "Racer's name must not be null. NullPointerException inside RacerDTO constructor.");
         this.team = Objects.requireNonNull(team,
@@ -105,7 +105,7 @@ public class RacerDTO {
         if (getClass() != otherObject.getClass()) {
             return false;
         }
-        RacerDTO other = (RacerDTO) otherObject;
+        Racer other = (Racer) otherObject;
         return Objects.equals(name, other.name) && Objects.equals(team, other.team) && lapTime == other.lapTime;
     }
 }

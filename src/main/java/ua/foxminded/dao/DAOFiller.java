@@ -27,7 +27,6 @@ import ua.foxminded.reader.ResourceReader;
  */
 public class DAOFiller {
     private ResourceReader reader = new ResourceReader();
-    private DAOFactory daoFactory = new DAOFactory();
 
     private final String SQL_INSERT_PERSONAL_DATA = "INSERT INTO racers.racers (id, name, team) VALUES (?,?,?) ON CONFLICT DO NOTHING";
     private final String SQL_UPDATE_START_TIME = "UPDATE racers.racers SET start_time = ? WHERE id = ?";
@@ -51,15 +50,12 @@ public class DAOFiller {
      * @throws DAOException          if a database access error occurs.
      */
     public void insertPersonalData(String fileAbbreviations) throws FileNotFoundException, DAOException {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
+        try (Connection connection = DAOConnection.getInstance().getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_INSERT_PERSONAL_DATA);) {
             if (!Files.exists(Paths.get(fileAbbreviations))) {
                 throw new FileNotFoundException(Paths.get(fileAbbreviations).getFileName() + MESSAGE_FILE_NOT_FOUND);
             } else {
                 List<String> listOfAbbreviations = reader.readFile(fileAbbreviations);
-                connection = daoFactory.getConnection();
-                statement = connection.prepareStatement(SQL_INSERT_PERSONAL_DATA);
                 for (String abbreviation : listOfAbbreviations) {
                     StringTokenizer token = new StringTokenizer(abbreviation, UNDERSCORE);
                     id = token.nextToken();
@@ -73,17 +69,6 @@ public class DAOFiller {
             }
         } catch (SQLException sqlE) {
             throw new DAOException("Failed to connect while update personal data.", sqlE);
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException sqlE) {
-                throw new DAOException("Failed to close connection while update personal data.", sqlE);
-            }
         }
     }
 
@@ -111,9 +96,8 @@ public class DAOFiller {
     }
 
     private void updateStartData(String fileStart) throws FileNotFoundException, DAOException {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
+        try (Connection connection = DAOConnection.getInstance().getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_START_TIME);) {
             if (!Files.exists(Paths.get(fileStart))) {
                 throw new FileNotFoundException(Paths.get(fileStart).getFileName() + MESSAGE_FILE_NOT_FOUND);
             } else {
@@ -125,8 +109,6 @@ public class DAOFiller {
                         id = string.substring(0, matcher.start());
                         startTime = string.substring(matcher.start());
                     }
-                    connection = daoFactory.getConnection();
-                    statement = connection.prepareStatement(SQL_UPDATE_START_TIME);
                     statement.setString(1, startTime);
                     statement.setString(2, id);
                     statement.executeUpdate();
@@ -134,24 +116,12 @@ public class DAOFiller {
             }
         } catch (SQLException sqlE) {
             throw new DAOException("Failed to connect while update start data.", sqlE);
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException sqlE) {
-                throw new DAOException("Failed to close connection while update start data.", sqlE);
-            }
         }
     }
 
     private void updateEndData(String fileEnd) throws FileNotFoundException, DAOException {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
+        try (Connection connection = DAOConnection.getInstance().getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_UNDATE_END_TIME);) {
             if (!Files.exists(Paths.get(fileEnd))) {
                 throw new FileNotFoundException(Paths.get(fileEnd).getFileName() + MESSAGE_FILE_NOT_FOUND);
             } else {
@@ -163,8 +133,6 @@ public class DAOFiller {
                         id = string.substring(0, matcher.start());
                         endTime = string.substring(matcher.start());
                     }
-                    connection = daoFactory.getConnection();
-                    statement = connection.prepareStatement(SQL_UNDATE_END_TIME);
                     statement.setString(1, endTime);
                     statement.setString(2, id);
                     statement.executeUpdate();
@@ -172,27 +140,13 @@ public class DAOFiller {
             }
         } catch (SQLException sqlE) {
             throw new DAOException("Failed to connect while update end data.", sqlE);
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException sqlE) {
-                throw new DAOException("Failed to close connection while update end data.", sqlE);
-            }
         }
     }
 
     private void updateLapTime() throws DAOException {
         Map<String, Long> mapLapTime = new DAOCalculator().countLapTime();
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            connection = daoFactory.getConnection();
-            statement = connection.prepareStatement(SQL_UPDATE_LAP_TIME);
+        try (Connection connection = DAOConnection.getInstance().getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_LAP_TIME);) {
             for (Map.Entry<String, Long> pair : mapLapTime.entrySet()) {
                 statement.setLong(1, pair.getValue());
                 statement.setString(2, pair.getKey());
@@ -200,17 +154,6 @@ public class DAOFiller {
             }
         } catch (SQLException sqlE) {
             throw new DAOException("Failed to connect while update lap time.", sqlE);
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException sqlE) {
-                throw new DAOException("Failed to close connection while update lap time.", sqlE);
-            }
         }
     }
 }

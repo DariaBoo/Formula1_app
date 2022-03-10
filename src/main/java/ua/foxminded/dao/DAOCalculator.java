@@ -19,7 +19,6 @@ import java.util.Map;
  * @version 1.0
  */
 public class DAOCalculator {
-    private DAOFactory daoFactory = new DAOFactory();
     private final String SQL_SELECT_RACERS = "SELECT * FROM racers.racers";
     private final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
 
@@ -37,7 +36,7 @@ public class DAOCalculator {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = daoFactory.getConnection();
+            connection = DAOConnection.getInstance().getConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(SQL_SELECT_RACERS);
             while (resultSet.next()) {

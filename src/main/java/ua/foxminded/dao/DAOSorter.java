@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import ua.foxminded.dto.RacerDTO;
+import ua.foxminded.racer.Racer;
 
 /**
  * DAOSorter is a class that can sort data by lap time taken from database to be
@@ -17,7 +17,6 @@ import ua.foxminded.dto.RacerDTO;
  * @version 1.0
  */
 public class DAOSorter {
-    private DAOFactory daoFactory = new DAOFactory();
     private final String SQL_SELECT_BY_LAP_TIME = "SELECT * FROM racers.racers ORDER BY lap_time";
 
     /**
@@ -27,17 +26,17 @@ public class DAOSorter {
      * @return the sorted by lap time list with RacerDTO.
      * @throws DAOException if a database access error occurs.
      */
-    public List<RacerDTO> sortByLapTime() throws DAOException {
-        List<RacerDTO> racers = new ArrayList<>();
+    public List<Racer> sortByLapTime() throws DAOException {
+        List<Racer> racers = new ArrayList<>();
         Connection connection = null;
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = daoFactory.getConnection();
+            connection = DAOConnection.getInstance().getConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(SQL_SELECT_BY_LAP_TIME);
             while (resultSet.next()) {
-                racers.add(new RacerDTO(resultSet.getString("name"), resultSet.getString("team"),
+                racers.add(new Racer(resultSet.getString("name"), resultSet.getString("team"),
                         resultSet.getLong("lap_time")));
             }
         } catch (SQLException sqlE) {
