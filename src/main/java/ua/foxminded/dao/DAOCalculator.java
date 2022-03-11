@@ -31,14 +31,10 @@ public class DAOCalculator {
      * @throws DAOException if a database access error occurs.
      */
     public Map<String, Long> countLapTime() throws DAOException {
-        Map<String, Long> mapLapTime = new HashMap<>();
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DAOConnection.getInstance().getConnection();
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(SQL_SELECT_RACERS);
+        Map<String, Long> mapLapTime = new HashMap<>();       
+        try (Connection connection = DAOConnection.getInstance().getConnection();
+                Statement statement = connection.createStatement();
+            ResultSet  resultSet = statement.executeQuery(SQL_SELECT_RACERS);) {
             while (resultSet.next()) {
                 String id = resultSet.getString("id");
                 String startTime = resultSet.getString("start_time");
@@ -50,21 +46,7 @@ public class DAOCalculator {
             }
         } catch (SQLException sqlE) {
             throw new DAOException("Failed to connect to database while take lap time from table.", sqlE);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException sqlE) {
-                throw new DAOException("Failed to close connection while take lap time from table.", sqlE);
-            }
-        }
+        } 
         return mapLapTime;
     }
 }

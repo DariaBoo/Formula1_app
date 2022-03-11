@@ -28,13 +28,9 @@ public class DAOSorter {
      */
     public List<Racer> sortByLapTime() throws DAOException {
         List<Racer> racers = new ArrayList<>();
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DAOConnection.getInstance().getConnection();
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(SQL_SELECT_BY_LAP_TIME);
+        try (Connection connection = DAOConnection.getInstance().getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(SQL_SELECT_BY_LAP_TIME);) {
             while (resultSet.next()) {
                 racers.add(new Racer(resultSet.getString("name"), resultSet.getString("team"),
                         resultSet.getLong("lap_time")));
@@ -42,17 +38,6 @@ public class DAOSorter {
         } catch (SQLException sqlE) {
             throw new DAOException("Failed to connect to database while sorted data from table or table does't exist.",
                     sqlE);
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException sqlE) {
-                throw new DAOException("Failed to close connection while fill table.", sqlE);
-            }
         }
         return racers;
     }
