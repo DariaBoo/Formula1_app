@@ -42,7 +42,7 @@ public class DAOCreator {
      * 
      * @throws DAOException
      */
-    public void createTable() throws DAOException {
+    public final void createTable() throws DAOException {
         try (Connection connection = DAOConnection.getInstance().getConnection();
                 Statement statement = connection.createStatement();) {
             statement.execute(sqlCreateTable);

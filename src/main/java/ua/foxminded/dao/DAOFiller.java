@@ -49,7 +49,7 @@ public class DAOFiller {
      * @throws FileNotFoundException if file is not exist.
      * @throws DAOException          if a database access error occurs.
      */
-    public void insertPersonalData(String fileAbbreviations) throws FileNotFoundException, DAOException {
+    public final void insertPersonalData(String fileAbbreviations) throws FileNotFoundException, DAOException {
         try (Connection connection = DAOConnection.getInstance().getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_INSERT_PERSONAL_DATA);) {
             if (!Files.exists(Paths.get(fileAbbreviations))) {
@@ -89,7 +89,7 @@ public class DAOFiller {
      * @throws FileNotFoundException if file is not exist.
      * @throws DAOException          if a database access error occurs.
      */
-    public void updateValues(String fileStart, String fileEnd) throws FileNotFoundException, DAOException {
+    public final void updateValues(String fileStart, String fileEnd) throws FileNotFoundException, DAOException {
         updateStartData(fileStart);
         updateEndData(fileEnd);
         updateLapTime();

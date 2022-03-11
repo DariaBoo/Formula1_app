@@ -16,7 +16,7 @@ import ua.foxminded.racer.Racer;
  * @author Daria Bogush
  * @version 1.0
  */
-public class DAOSorter {
+public class DAODesigner {
     private final String SQL_SELECT_BY_LAP_TIME = "SELECT * FROM racers.racers ORDER BY lap_time";
 
     /**
