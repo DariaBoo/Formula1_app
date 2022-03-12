@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import ua.foxminded.dao.DAOException;
+import ua.foxminded.exception.DAOException;
 import ua.foxminded.racer.Racer;
 
 class FomatterTest {

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import ua.foxminded.exception.DAOException;
+
 /**
  * Creates a new schema with empty table in the database upon SQL query that can
  * then be populated with data. If schema or table already exist does nothing.
@@ -27,7 +29,7 @@ public class DAOCreator {
      * @throws DAOException if a database access error occurs.
      */
     public final void createDatabase() throws DAOException {
-        try (Connection connection = DAOConnection.getInstance().getConnection();
+        try (Connection connection = ConnectionManager.getInstance().getConnection();
                 Statement statement = connection.createStatement();) {
             statement.execute(sqlCreateSchema);
         } catch (SQLException e) {
@@ -43,7 +45,7 @@ public class DAOCreator {
      * @throws DAOException
      */
     public final void createTable() throws DAOException {
-        try (Connection connection = DAOConnection.getInstance().getConnection();
+        try (Connection connection = ConnectionManager.getInstance().getConnection();
                 Statement statement = connection.createStatement();) {
             statement.execute(sqlCreateTable);
         } catch (SQLException e) {

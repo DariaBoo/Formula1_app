@@ -1,4 +1,4 @@
-package ua.foxminded.dao;
+package ua.foxminded.exception;
 
 /**
  * The class DAOException is a DAO layer exception which can be thrown when a

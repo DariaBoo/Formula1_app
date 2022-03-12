@@ -1,9 +1,9 @@
 package ua.foxminded;
 
-import ua.foxminded.dao.DAOException;
 import ua.foxminded.dao.DAOFacade;
-import ua.foxminded.dao.DAOSorter;
+import ua.foxminded.exception.DAOException;
 import ua.foxminded.formatter.Formatter;
+import ua.foxminded.sorter.Sorter;
 
 public class Main {
     private static final String fileStart = "src/main/resources/start.log";
@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             DAOFacade daoFacade = new DAOFacade();
-            DAOSorter daoSorter = new DAOSorter();
+            Sorter daoSorter = new Sorter();
             daoFacade.prepareDatabase(fileStart, fileEnd, fileAbbreviations);
             Formatter formatter = new Formatter(daoSorter.sortByLapTime());
             System.out.println(formatter.formatResult());

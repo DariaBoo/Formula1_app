@@ -1,4 +1,4 @@
-package ua.foxminded.dao;
+package ua.foxminded.sorter;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import ua.foxminded.dao.ConnectionManager;
+import ua.foxminded.exception.DAOException;
 import ua.foxminded.racer.Racer;
 
 /**
@@ -16,7 +18,7 @@ import ua.foxminded.racer.Racer;
  * @author Daria Bogush
  * @version 1.0
  */
-public class DAODesigner {
+public class Sorter {
     private final String SQL_SELECT_BY_LAP_TIME = "SELECT * FROM racers.racers ORDER BY lap_time";
 
     /**
@@ -28,7 +30,7 @@ public class DAODesigner {
      */
     public List<Racer> sortByLapTime() throws DAOException {
         List<Racer> racers = new ArrayList<>();
-        try (Connection connection = DAOConnection.getInstance().getConnection();
+        try (Connection connection = ConnectionManager.getInstance().getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(SQL_SELECT_BY_LAP_TIME);) {
             while (resultSet.next()) {

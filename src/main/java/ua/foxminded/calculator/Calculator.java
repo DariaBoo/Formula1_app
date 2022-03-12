@@ -1,4 +1,4 @@
-package ua.foxminded.dao;
+package ua.foxminded.calculator;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -10,6 +10,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+import ua.foxminded.dao.ConnectionManager;
+import ua.foxminded.exception.DAOException;
+
 /**
  * DAOCalculator is a class that calculates the lap time of the racers using
  * start time and end time taken from the database. The table of the database
@@ -18,7 +21,7 @@ import java.util.Map;
  * @author Boo Family
  * @version 1.0
  */
-public class DAOCalculator {
+public class Calculator {
     private final String SQL_SELECT_RACERS = "SELECT * FROM racers.racers";
     private final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
 
@@ -32,7 +35,7 @@ public class DAOCalculator {
      */
     public Map<String, Long> countLapTime() throws DAOException {
         Map<String, Long> mapLapTime = new HashMap<>();       
-        try (Connection connection = DAOConnection.getInstance().getConnection();
+        try (Connection connection = ConnectionManager.getInstance().getConnection();
                 Statement statement = connection.createStatement();
             ResultSet  resultSet = statement.executeQuery(SQL_SELECT_RACERS);) {
             while (resultSet.next()) {

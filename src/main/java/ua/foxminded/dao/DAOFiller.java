@@ -12,6 +12,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ua.foxminded.calculator.Calculator;
+import ua.foxminded.exception.DAOException;
 import ua.foxminded.reader.ResourceReader;
 
 /**
@@ -50,7 +52,7 @@ public class DAOFiller {
      * @throws DAOException          if a database access error occurs.
      */
     public final void insertPersonalData(String fileAbbreviations) throws FileNotFoundException, DAOException {
-        try (Connection connection = DAOConnection.getInstance().getConnection();
+        try (Connection connection = ConnectionManager.getInstance().getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_INSERT_PERSONAL_DATA);) {
             if (!Files.exists(Paths.get(fileAbbreviations))) {
                 throw new FileNotFoundException(Paths.get(fileAbbreviations).getFileName() + MESSAGE_FILE_NOT_FOUND);
@@ -96,7 +98,7 @@ public class DAOFiller {
     }
 
     private void updateStartData(String fileStart) throws FileNotFoundException, DAOException {
-        try (Connection connection = DAOConnection.getInstance().getConnection();
+        try (Connection connection = ConnectionManager.getInstance().getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_START_TIME);) {
             if (!Files.exists(Paths.get(fileStart))) {
                 throw new FileNotFoundException(Paths.get(fileStart).getFileName() + MESSAGE_FILE_NOT_FOUND);
@@ -120,7 +122,7 @@ public class DAOFiller {
     }
 
     private void updateEndData(String fileEnd) throws FileNotFoundException, DAOException {
-        try (Connection connection = DAOConnection.getInstance().getConnection();
+        try (Connection connection = ConnectionManager.getInstance().getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_UNDATE_END_TIME);) {
             if (!Files.exists(Paths.get(fileEnd))) {
                 throw new FileNotFoundException(Paths.get(fileEnd).getFileName() + MESSAGE_FILE_NOT_FOUND);
@@ -144,8 +146,8 @@ public class DAOFiller {
     }
 
     private void updateLapTime() throws DAOException {
-        Map<String, Long> mapLapTime = new DAOCalculator().countLapTime();
-        try (Connection connection = DAOConnection.getInstance().getConnection();
+        Map<String, Long> mapLapTime = new Calculator().countLapTime();
+        try (Connection connection = ConnectionManager.getInstance().getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_LAP_TIME);) {
             for (Map.Entry<String, Long> pair : mapLapTime.entrySet()) {
                 statement.setLong(1, pair.getValue());

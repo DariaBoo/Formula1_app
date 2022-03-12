@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import ua.foxminded.exception.DAOException;
+
 /**
  * Provides access to the database PostgreSQL by getting a Connection instance
  * using database URL, user name and password.
@@ -17,15 +19,15 @@ import java.sql.SQLException;
  * @author Daria Bogush
  * @version 1.0
  */
-public class DAOConnection {
-    private static DAOConnection instance;
+public class ConnectionManager {
+    private static ConnectionManager instance;
     private Connection connection;
     private static String DB_USERNAME = "postgres";
     private static String DB_PASSWORD = "555";
     private static String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
 
 
-    private DAOConnection() throws DAOException {
+    private ConnectionManager() throws DAOException {
         try {
             connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
         } catch (SQLException sqlE) {
@@ -47,12 +49,12 @@ public class DAOConnection {
      * @return an instance of the class.
      * @throws DAOException if a database access error occurs.
      */
-    public static DAOConnection getInstance() throws DAOException {
+    public static ConnectionManager getInstance() throws DAOException {
         try {
             if (instance == null) {
-                instance = new DAOConnection();
+                instance = new ConnectionManager();
             } else if (instance.getConnection().isClosed()) {
-                instance = new DAOConnection();
+                instance = new ConnectionManager();
             }
         } catch (SQLException sqlE) {
             throw new DAOException("Failed to connect to database.", sqlE);

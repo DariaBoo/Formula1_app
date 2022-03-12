@@ -2,6 +2,8 @@ package ua.foxminded.dao;
 
 import java.io.FileNotFoundException;
 
+import ua.foxminded.exception.DAOException;
+
 /**
  * This is a simple facade class which initiates the creation of the schema and
  * table and populates all the columns of the table.
