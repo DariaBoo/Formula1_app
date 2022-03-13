@@ -3,6 +3,7 @@ package ua.foxminded.dao;
 import java.io.FileNotFoundException;
 
 import ua.foxminded.exception.DAOException;
+import ua.foxminded.exception.ReaderException;
 
 /**
  * This is a simple facade class which initiates the creation of the schema and
@@ -25,7 +26,8 @@ public class DAOFacade {
      * @param fileEnd           should contain racers abbreviation and end date and
      *                          time.
      * @param fileAbbreviations should contain racers abbreviation, name and team.
-     * @throws DAOException if a database access error occurs.
+     * @throws DAOException    if a database access error occurs.
+     * @throws ReaderException
      */
     public void prepareDatabase(String fileStart, String fileEnd, String fileAbbreviations) throws DAOException {
         try {
@@ -35,6 +37,10 @@ public class DAOFacade {
             filler.updateValues(fileStart, fileEnd);
         } catch (FileNotFoundException exception) {
             System.err.println(exception.getMessage());
+            System.exit(0);
+        } catch (ReaderException exception) {
+            System.err.println(exception.getMessage() + "\n");
+            exception.printStackTrace();
             System.exit(0);
         }
     }

@@ -23,6 +23,7 @@
         <mokito.core.version>2.21.0</mokito.core.version>
         <maven.javadoc.plugin>3.0.0</maven.javadoc.plugin>
         <postgresql.version>42.3.3</postgresql.version>
+        <assertj.core.version>3.22.0</assertj.core.version>
     </properties>
 
     <dependencies>
@@ -51,6 +52,13 @@
             <version>${mokito.core.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.core.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -70,7 +78,7 @@
                     <configuration>
                         <source>${maven.compiler.source}</source>
                         <target>${maven.compiler.target}</target>
-                    </configuration> 
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>

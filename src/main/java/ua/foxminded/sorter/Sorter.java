@@ -35,7 +35,7 @@ public class Sorter {
                 ResultSet resultSet = statement.executeQuery(SQL_SELECT_BY_LAP_TIME);) {
             while (resultSet.next()) {
                 racers.add(new Racer(resultSet.getString("name"), resultSet.getString("team"),
-                        resultSet.getLong("lap_time")));
+                        resultSet.getLong("lap_time")));               
             }
         } catch (SQLException sqlE) {
             throw new DAOException("Failed to connect to database while sorted data from table or table does't exist.",

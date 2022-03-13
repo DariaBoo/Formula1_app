@@ -26,7 +26,6 @@ public class ConnectionManager {
     private static String DB_PASSWORD = "555";
     private static String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
 
-
     private ConnectionManager() throws DAOException {
         try {
             connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
@@ -34,6 +33,7 @@ public class ConnectionManager {
             throw new DAOException("Failed to connect to database.", sqlE);
         }
     }
+
     /**
      * Attempts to establish a connection to the database URL.
      * 

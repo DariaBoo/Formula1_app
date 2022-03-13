@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import ua.foxminded.calculator.Calculator;
 import ua.foxminded.exception.DAOException;
+import ua.foxminded.exception.ReaderException;
 import ua.foxminded.reader.ResourceReader;
 
 /**
@@ -50,8 +51,10 @@ public class DAOFiller {
      * @param fileAbbreviations should contain racers abbreviation, name and team.
      * @throws FileNotFoundException if file is not exist.
      * @throws DAOException          if a database access error occurs.
+     * @throws ReaderException
      */
-    public final void insertPersonalData(String fileAbbreviations) throws FileNotFoundException, DAOException {
+    public final void insertPersonalData(String fileAbbreviations)
+            throws FileNotFoundException, DAOException, ReaderException {
         try (Connection connection = ConnectionManager.getInstance().getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_INSERT_PERSONAL_DATA);) {
             if (!Files.exists(Paths.get(fileAbbreviations))) {
@@ -90,14 +93,16 @@ public class DAOFiller {
      * @param fileEnd   should contain racers abbreviation and end date and time.
      * @throws FileNotFoundException if file is not exist.
      * @throws DAOException          if a database access error occurs.
+     * @throws ReaderException
      */
-    public final void updateValues(String fileStart, String fileEnd) throws FileNotFoundException, DAOException {
+    public final void updateValues(String fileStart, String fileEnd)
+            throws FileNotFoundException, DAOException, ReaderException {
         updateStartData(fileStart);
         updateEndData(fileEnd);
         updateLapTime();
     }
 
-    private void updateStartData(String fileStart) throws FileNotFoundException, DAOException {
+    private void updateStartData(String fileStart) throws FileNotFoundException, DAOException, ReaderException {
         try (Connection connection = ConnectionManager.getInstance().getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_START_TIME);) {
             if (!Files.exists(Paths.get(fileStart))) {
@@ -121,7 +126,7 @@ public class DAOFiller {
         }
     }
 
-    private void updateEndData(String fileEnd) throws FileNotFoundException, DAOException {
+    private void updateEndData(String fileEnd) throws FileNotFoundException, DAOException, ReaderException {
         try (Connection connection = ConnectionManager.getInstance().getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_UNDATE_END_TIME);) {
             if (!Files.exists(Paths.get(fileEnd))) {

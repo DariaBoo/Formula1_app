@@ -66,8 +66,8 @@ public class Formatter {
 
     private List<String> prepareData() {
         if (racers.size() == 0) {
-            throw new NullPointerException(" : Parametr List<RacerDTO> racers is null in method "
-                    + Thread.currentThread().getStackTrace()[1].getMethodName());
+            throw new NullPointerException(" : Parametr List<RacerDTO> racers is null in the class "
+                    + Thread.currentThread().getStackTrace()[1].getClassName() + " in the method " + Thread.currentThread().getStackTrace()[1].getMethodName());
         }
         List<String> result = new ArrayList<String>(racers.size());
         String[] partOne = new String[racers.size()];

@@ -14,6 +14,10 @@ public class Main {
         try {
             DAOFacade daoFacade = new DAOFacade();
             Sorter daoSorter = new Sorter();
+            if(fileStart == null || fileEnd == null || fileAbbreviations == null) {
+                throw new NullPointerException(
+                        "One or more input files are null.");
+            }
             daoFacade.prepareDatabase(fileStart, fileEnd, fileAbbreviations);
             Formatter formatter = new Formatter(daoSorter.sortByLapTime());
             System.out.println(formatter.formatResult());

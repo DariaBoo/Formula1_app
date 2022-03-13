@@ -51,7 +51,7 @@ public class Racer {
             this.lapTime = lapTime;
         }
     }
-
+    
     /**
      * Returns a String which represents racer's name.
      * 

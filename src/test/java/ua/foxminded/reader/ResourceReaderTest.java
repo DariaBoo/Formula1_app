@@ -1,18 +1,20 @@
 package ua.foxminded.reader;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import ua.foxminded.exception.ReaderException;
+
 class ResourceReaderTest {
     ResourceReader reader = new ResourceReader();
 
     @Test
-    void readFile_shouldReturnFilledList_whenInputFileDirectory() {
+    void readFile_shouldReturnFilledList_whenInputFileDirectory() throws ReaderException {
         List<String> expected = new ArrayList<String>();
         expected.add("DRR_Daniel Ricciardo_RED BULL RACING TAG HEUER");
         expected.add("SVF_Sebastian Vettel_FERRARI");
@@ -33,16 +35,19 @@ class ResourceReaderTest {
         expected.add("MES_Marcus Ericsson_SAUBER FERRARI");
         expected.add("LSW_Lance Stroll_WILLIAMS MERCEDES");
         expected.add("KMH_Kevin Magnussen_HAAS FERRARI");
+
         assertEquals(expected, reader.readFile("src/test/resources/abbreviations.txt"));
     }
 
     @Test
-    void readFile_shouldThrowNullPointerException_whenInputNull() {
-        assertThrows(NullPointerException.class, () -> reader.readFile(null));
+    void readFile_shouldThrowsReaderException_whenInputEmptyFile() throws ReaderException {
+        Throwable throwable = catchThrowable(() -> reader.readFile("src/test/resources/empty file.txt"));
+        assertThat(throwable).isInstanceOf(ReaderException.class);
     }
 
     @Test
-    void readFile_shouldReturnEmptyList_whenInputEmptyFile() {
-        assertEquals(new ArrayList<String>(), reader.readFile("src/test/resources/empty file.txt"));
+    void readFile_shouldThrowsNullPointerException_whenInputNull() {
+        Throwable throwable = catchThrowable(() -> reader.readFile(null));
+        assertThat(throwable).isInstanceOf(NullPointerException.class);
     }
 }
